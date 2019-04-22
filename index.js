@@ -83,7 +83,7 @@ var myp = new MyPromise(function (rs, rj) {
     }, 2000)
 }).then(function (r) {
     console.log(`result is ${r}`)
-    1/0
+    throw new Error('Error happened!')
 }).then(function (r) {
     console.log(r)
 }, function (r) {
