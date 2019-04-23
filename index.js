@@ -46,8 +46,12 @@ MyPromise.prototype.kickOff = function (value) {
             try {
                 const m = thisPromise.state === fullfilled ? 'onFullfilled' : 'onRejected'
                 const m2 = thisPromise.state === fullfilled ? 'resolve' : 'reject'
-
-                laterPromise[m2](laterPromise[m](value))
+                if(laterPromise[m]){
+                    laterPromise.resolve(laterPromise[m](value))
+                }else{
+                    //if no callback provided,next promise should be the same as current one
+                    laterPromise[m2](value)
+                }
 
             } catch (e) {
                 laterPromise.reject(e)
@@ -83,10 +87,15 @@ var myp = new MyPromise(function (rs, rj) {
     }, 2000)
 }).then(function (r) {
     console.log(`result is ${r}`)
-    throw new Error('Error happened!')
+    throw Error('abc')
 }).then(function (r) {
-    console.log(r)
+    console.log('do sth')
 }, function (r) {
-    console.log(r)
+    
     console.log('error')
+}).then(function (r) {
+    console.log('do sth2')
+}, function (r) {
+    
+    console.log('error2')
 })
